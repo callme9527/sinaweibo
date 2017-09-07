@@ -125,7 +125,7 @@ class VideoSpider(object):
             html = html.group(1).replace('\\', '').replace('\r\n', '') if html else None
             #  得到最后一个微博的ID
             min_id = self.parser(html, wb_q)
-            page_id = re.search('page=([0-9]+)', page_url, re.S).group(1)
+            page_id = re.search('&page=([0-9]+)', page_url, re.S).group(1)
             end_id = re.search('end_id=([0-9]+)', page_url, re.S).group(1)
             #  构造ajax__url
             ajax_url = 'http://weibo.com/aj/mblog/fsearch?ajwvr=6&pre_page=%s&page=%s&end_id=%s&min_id=%s' \
