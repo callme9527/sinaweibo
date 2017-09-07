@@ -4,8 +4,8 @@ pin_url = 'https://login.sina.com.cn/cgi/pin.php?r=%s&s=0&p=%s'
 login_url = 'https://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.19)'
 users = [
     {
-        'name': '15736876577',
-        'pwd': 'wys140825'
+        'name': 'xxx',
+        'pwd': 'xxx'
     },
 ]
 coroutine_num = 3
