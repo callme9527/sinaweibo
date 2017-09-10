@@ -14,7 +14,7 @@ class StoreSpder(object):
         self.datas = []
         self.client = pymongo.MongoClient('mongodb://localhost:27017/')
         self.db = self.client['spider']
-        self.collection = self.db['wb_video']
+        self.collection = self.db['wb']
 
     def store(self, wb_q):
         self.con_db()
@@ -30,8 +30,6 @@ class StoreSpder(object):
                     self.datas = []
             except Exception, e:
                 print str(e)
-                with open('error_store.txt', 'a')as f:
-                    f.write('[*]error:'+str(e)+'\n'+str(self.datas)+'\n\n')
 
     def store_end(self):
         if len(self.datas) > 0:
