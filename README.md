@@ -22,7 +22,8 @@
 在video_store.py中将爬取到的视频信息保存至mongo中.<br/>
 
 ### 说明
-**本爬虫只是用于个人的学习，未来会加入代理ip，人工打码以及更多微博的爬取.希望大家可以多多指导改进!**<br/>
+本爬虫只是用于个人的学习，未来会加入代理ip，人工打码以及更多微博的爬取.希望大家可以多多指导改进.<br/>
+
 ---
 ## 更新
 添加了对图片，音乐，文章以及全部等分类微博的爬取。
@@ -30,4 +31,19 @@
 **python begin.py -t 分类名（tag）**，分类名可以为：['all', 'video', 'pic', 'music', 'article', '全部', '视频', '图片', '音乐', '文章' ]
 ### 说明
 接下来会增加ip代理，并对关注者和粉丝信息及微博进行爬取的功能！
+
+---
+## 更新至v3
+多进程抓取信息和存储信息,主要模块如下:
+### 1.cookie（in cookie.py）
+使用gevent异步获取cookie，并加入了云打码识别验证码. 账号需在conf.py下配置,抓取结果存入mongodb。
+### 2.抓取信息（in handle.py）
+多线程抓取微博，用户以及待爬url信息.在各个线程中加入gevent爬取相应信息.
+### 3.存储信息 (in store.py)
+多线程存储微博和用户信息.
+### 运行结果
+![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/wb.png)
+![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/wb2.png)
+![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/info.png)
+
 
