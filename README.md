@@ -34,7 +34,7 @@
 
 ---
 ## 更新至v3
-多进程抓取信息和存储信息,主要模块如下:
+多进程抓取信息和存储信息，通过python begin.py启动.主要模块如下:
 ### 1.cookie（in cookie.py）
 使用gevent异步获取cookie，并加入了云打码识别验证码. 账号需在conf.py下配置,抓取结果存入mongodb。
 ### 2.抓取信息（in handle.py）
