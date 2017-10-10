@@ -42,8 +42,8 @@
 ### 3.存储信息 (in store.py)
 多线程存储微博和用户信息.
 ### 运行结果
-![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/wb.png)
-![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/wb2.png)
-![](https://github.com/callme9527/sinaweibo/weibo_v3/pic/info.png)
+![](https://github.com/callme9527/sinaweibo/tree/master/weibo_v3/pic/wb.png)
+![](https://github.com/callme9527/sinaweibo/tree/master/weibo_v3/pic/wb2.png)
+![](https://github.com/callme9527/sinaweibo/tree/master/weibo_v3/pic/info.png)
 
 
