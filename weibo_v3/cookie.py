@@ -125,7 +125,7 @@ def get_cookie(user, try_times=0):
             'cookie': cookie,
             'time': time.time()
         }
-        db_cookie.delete({'_id': user})
+        db_cookie.delete({'_id': user[0]})
         db_cookie.insert(record)
     except (AuthError, UnknownError):
         logger.info(u'用户为:'+user[0]+u'的账号有问题,请修改或删除')
