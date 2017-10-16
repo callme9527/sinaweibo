@@ -2,8 +2,6 @@
 __author__ = '9527'
 
 from gevent import monkey, sleep
-# 这块如果不加thread=False，get_wb中的greelets只会执行一次.
-# 在网上查了然后加上的，有谁知道这块原理的话告我一下哦.
 monkey.patch_all(thread=False)
 
 import re
