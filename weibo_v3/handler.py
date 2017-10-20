@@ -5,6 +5,7 @@ from gevent import monkey, sleep
 monkey.patch_all(thread=False)
 
 import re
+import ast
 import json
 import gevent
 import logging
@@ -26,6 +27,7 @@ sys.setrecursionlimit(100000)
 def start_handler(url_q, wb_q, info_q):
     handler = Handler(url_q, wb_q, info_q)
     handler.handle_url()
+
 
 logger = logging.getLogger('weibo')
 
@@ -100,11 +102,13 @@ class Handler(object):
                 # info_t.start()
                 # url_t.join()
                 # info_t.join()
+
                 greenlets = []
                 greenlets.append(gevent.spawn(self.get_wb))
                 greenlets.append(gevent.spawn(self.get_url))
                 greenlets.append(gevent.spawn(self.get_info))
                 gevent.joinall(greenlets)
+
                 self.handle_urls.add(url)
             except Empty:
                 sleep(1)
@@ -114,6 +118,7 @@ class Handler(object):
     @log
     def get_wb(self):
         wb_num = self.args.get('wb_num', 0)
+        print u'微博数:'+str(wb_num)
         if not wb_num: return
         page_count = wb_num / 45 if wb_num % 45 == 0 else wb_num / 45 + 1
         domain = self.args['domain']
@@ -155,24 +160,30 @@ class Handler(object):
         self.handle_info_url(url)
 
     def handle_wb_url(self, url):
-        res = self.downloader.download(url)
-        if not res or not res.content:
-            logger.debug('改url:'+url+'无微博内容')
-            return
-        # logger.debug('wb_html:'+res.content)
-        if 'mbloglist' in url:
-            html = json.loads(res.content).get('data', '')
-        else:
-            html = re.search('js/pl/content/homeFeed/index.js.*?html":"(.*?)"}', res.content, re.S)
-            if not html: return
-            html = html.group(1).replace('\\t', '').replace('\\n', '').replace('\\r', '').replace('\\', '')
-        if not html:
-            logger.debug(u'该url:' + url + u'无微博信息')
-            return
-        wbs = Parser.parse_wb(html, self.args['uid'])
-        if not wbs: return
-        self.wb_q.put_nowait(wbs)
-        # print (self.wb_q.qsize())
+        try:
+            res = self.downloader.download(url)
+            if not res or not res.content:
+                logger.debug('改url:'+url+'无微博内容')
+                return
+            # logger.debug('wb_html:'+res.content)
+            if 'mbloglist' in url:
+                data = re.search('"data":"(.*?)"}', res.content, re.S)
+                data = data.group(1) if data else ''
+                html = data.replace('\\r', '').replace('\\n', '').replace('\\t', '').replace('\\', '').strip()
+                # print html
+            else:
+                html = re.search('js/pl/content/homeFeed/index.js.*?html":"(.*?)"}', res.content, re.S)
+                if not html: return
+                html = html.group(1).replace('\\t', '').replace('\\n', '').replace('\\r', '').replace('\\', '')
+            if not html:
+                logger.debug(u'该url:' + url + u'无微博信息')
+                return
+            wbs = Parser.parse_wb(html, self.args['uid'])
+            if not wbs: return
+            self.wb_q.put_nowait(wbs)
+            # print (self.wb_q.qsize())
+        except Exception, e:
+            logger.warning('error in hand_wb_url:'+str(e)+u',url为:'+url)
 
     def handle_relate_url(self, url):
         res = self.downloader.download(url)
@@ -193,7 +204,8 @@ class Handler(object):
             res = self.downloader.download(url)
             if not res: return
         info = Parser.parse_info(res.content)
-        self.info_q.put_nowait(info)
+        if info: self.info_q.put_nowait(info)
+
 
 if __name__ == '__main__':
     url_q = Queue()
